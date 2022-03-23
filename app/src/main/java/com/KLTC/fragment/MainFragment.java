@@ -1,6 +1,6 @@
 package com.KLTC.fragment;
 
-import static com.KLTC.remote.DeveloperKey.DEVELOPER_KEY;
+import static com.KLTC.remote.DevKey.DEVELOPER_KEY;
 
 import android.content.Intent;
 import android.graphics.Color;

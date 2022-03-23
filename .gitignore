@@ -14,5 +14,5 @@
 .cxx
 local.properties
 google-services.json
-src/main/com/KTLC/remote/DeveloperKey
+src/main/com/KTLC/remote/DevKey
 src/main/com/KTLC/remote/Rawdata
