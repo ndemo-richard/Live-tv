@@ -8,7 +8,7 @@ public class Tv {
     @SerializedName("id") private int id;
     @SerializedName("title") private String title;
     @SerializedName("description") private String description;
-    @SerializedName("localImageResource") private String thumbnail;
+    @SerializedName("localImageResource") private String localImageResource;
     @SerializedName("url") private String url;
 
     public Tv(){}
@@ -36,17 +36,17 @@ public class Tv {
     public void setDescription(String description){
         this.description=description;
     }
-    public String getThumbnail(){
-        return thumbnail;
+    public String getlocalImageResource(){
+        return localImageResource;
     }
 
-    public void setThumbnail(String thumbnail){
-        this.thumbnail=thumbnail;
+    public void setlocalImageResource(String localImageResource){
+        this.localImageResource=localImageResource;
     }
 
     public int getImageResource(Context context){
         return context.getResources()
-                .getIdentifier(thumbnail, "drawable",context.getPackageName());
+                .getIdentifier(localImageResource, "drawable",context.getPackageName());
     }
 
     public String getUrl(){

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.KLTC.fragment.MainFragment;
+import com.firebase.client.Firebase;
 
 /*
  * Main Activity class that loads {@link MainFragment}.
@@ -16,6 +17,7 @@ public class App extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
