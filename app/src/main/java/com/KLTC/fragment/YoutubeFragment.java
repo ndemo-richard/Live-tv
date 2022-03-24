@@ -2,7 +2,7 @@
 //this is working
 package com.KLTC.fragment;
 
-import static com.KLTC.remote.DeveloperKey.DEVELOPER_KEY;
+import static com.KLTC.remote.DevKey.DEVELOPER_KEY;
 
 import android.os.Bundle;
 
@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.KLTC.R;
-import com.KLTC.model.Tv;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 

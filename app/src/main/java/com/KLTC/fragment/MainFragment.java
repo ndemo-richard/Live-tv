@@ -1,22 +1,16 @@
 package com.KLTC.fragment;
 
-import static com.KLTC.remote.DevKey.DEVELOPER_KEY;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.leanback.app.BackgroundManager;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
-import androidx.leanback.widget.ImageCardView;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.OnItemViewClickedListener;
@@ -25,11 +19,7 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
-
-import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
-import com.google.android.youtube.player.YouTubePlayerFragment;
-
 import java.util.List;
 
 import com.KLTC.R;
@@ -39,8 +29,6 @@ import com.KLTC.model.Tv;
 import com.KLTC.presenter.TvChannelPresenter;
 import com.KLTC.presenter.RadioPresenter;
 import com.KLTC.remote.RemoteManager;
-import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-import com.google.android.youtube.player.YouTubePlayerSupportFragmentX;
 
 public class MainFragment extends BrowseSupportFragment implements IMainFragment {
 
@@ -62,12 +50,14 @@ public class MainFragment extends BrowseSupportFragment implements IMainFragment
         loadData();
         setupBackgroundManager();
         setupEventListeners();
+
     }
 
     @Override
     public void onDestroy(){
         super.onDestroy();
     }
+
 
     private void setupUIElements() {
         //setBadgeDrawable(getActivity().getResources().getDrawable(R.drawable.videos_by_google_banner));
@@ -143,32 +133,48 @@ public class MainFragment extends BrowseSupportFragment implements IMainFragment
 
             Tv tv = (Tv)item;
 
-            Log.i("check","ujanja " +tv.getTitle());
-           // Log.i("check","ujanja " +tv.getUrl());
-
             // get video Id from url
             String videoId = getVideoIdFromUrl(tv.getUrl());
+            String videoTag  = getVideoTagFromUrl(tv.getUrl());
+
+            String videoCheck = "";
+
+
+            if(videoCheck != videoId){
+                YoutubeFragment fragment = new YoutubeFragment();
+                FragmentManager manager = getParentFragmentManager();
+
+                Bundle bundle = new Bundle();
+                String myMessage = videoId;
+                bundle.putString("message", myMessage );
+                fragment.setArguments(bundle);
+                manager.beginTransaction()
+                        .replace(R.id.main_browse_fragment, fragment)
+                        .addToBackStack(null)
+                        .commit();
+
+            }else {
+                Fragment mFragment= new DailymotionFragment();
+
+                Bundle bundle = new Bundle();
+                String myMessage2 = videoTag;
+                bundle.putString("message",myMessage2);
+                mFragment.setArguments(bundle);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.main_browse_fragment, mFragment, null)
+                        .addToBackStack(null)
+                        .commit();
 
 
 
 
-            Log.i("try this","is it okay  " + videoId);
+            }
 
-            YoutubeFragment fragment = new YoutubeFragment();
-            FragmentManager manager = getParentFragmentManager();
 
-            Bundle bundle = new Bundle();
-            String myMessage = videoId;
-            bundle.putString("message", myMessage );
-            fragment.setArguments(bundle);
-            manager.beginTransaction()
-                    .replace(R.id.main_browse_fragment, fragment)
-                    .addToBackStack(null)
-                    .commit();
 
 
         }
-
+        //for youtube
         protected String getVideoIdFromUrl(String url){
             if (url.contains("http")){
                 if (!url.contains("https")){
@@ -182,6 +188,24 @@ public class MainFragment extends BrowseSupportFragment implements IMainFragment
                 return url.replace("https://www.youtube.com/watch?v=", "");
             }else if(url.contains("https://youtu.be/")){
                 return url.replace("https://youtu.be/", "");
+            }
+            return "";
+        }
+
+        //for dailymotion
+        protected String getVideoTagFromUrl(String url){
+            if (url.contains("http")){
+                if (!url.contains("https")){
+                    url = url.replace("http", "https");
+                }
+            }
+            if (url.contains("//dai.ly/")){
+                if(url.contains("&list=")){
+                    return url.substring(url.indexOf("//dai.ly/")+0, url.indexOf("&list="));
+                }
+                return url.replace("https://dai.ly/", "");
+            }else if(url.contains("https://dai.ly/")){
+                return url.replace("https://dai.ly/", "");
             }
             return "";
         }

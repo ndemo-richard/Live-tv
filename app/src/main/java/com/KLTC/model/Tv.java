@@ -1,8 +1,9 @@
 package com.KLTC.model;
 
-import android.content.Context;
-
 import com.google.gson.annotations.SerializedName;
+
+
+
 public class Tv {
 
     @SerializedName("id") private int id;
@@ -10,6 +11,7 @@ public class Tv {
     @SerializedName("description") private String description;
     @SerializedName("localImageResource") private String localImageResource;
     @SerializedName("url") private String url;
+    @SerializedName("imageUrl") private String imageUrl;
 
     public Tv(){}
 
@@ -36,18 +38,10 @@ public class Tv {
     public void setDescription(String description){
         this.description=description;
     }
-    public String getlocalImageResource(){
-        return localImageResource;
-    }
 
-    public void setlocalImageResource(String localImageResource){
-        this.localImageResource=localImageResource;
-    }
+    public  String getImageUrl(){return imageUrl;}
 
-    public int getImageResource(Context context){
-        return context.getResources()
-                .getIdentifier(localImageResource, "drawable",context.getPackageName());
-    }
+    public void setImageUrl(String imageUrl){this.imageUrl=imageUrl;}
 
     public String getUrl(){
         return url;
