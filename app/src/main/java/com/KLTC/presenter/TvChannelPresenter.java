@@ -1,7 +1,11 @@
 package com.KLTC.presenter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -9,7 +13,11 @@ import androidx.leanback.widget.BaseCardView;
 import androidx.leanback.widget.ImageCardView;
 import androidx.leanback.widget.Presenter;
 
+import com.KLTC.R;
 import com.KLTC.model.Tv;
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 public class TvChannelPresenter extends Presenter{
 
@@ -17,13 +25,45 @@ public class TvChannelPresenter extends Presenter{
     private static int CARD_WIDTH  = 200;
     private static int CARD_HEIGHT = 200;
 
+    static class PicassoImageCardViewTarget implements Target {
+        private ImageCardView mImageCardView;
+
+        public PicassoImageCardViewTarget(ImageCardView mImageCardView) {
+            this.mImageCardView = mImageCardView;
+        }
+
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            Drawable bitmapDrawable = new BitmapDrawable(mContext.getResources(), bitmap);
+            mImageCardView.setMainImage(bitmapDrawable);
+
+        }
+
+        @Override
+        public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+            mImageCardView.setMainImage(errorDrawable);
+
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+    }
+
     private static class ViewHolder extends Presenter.ViewHolder{
         private Tv tv;
         private ImageCardView mCardView;
+        private Drawable mDefaultCardImage;
+        private PicassoImageCardViewTarget mImageCardViewTarget;
 
         public ViewHolder(View view){
             super(view);
             mCardView=(ImageCardView)view;
+            mImageCardViewTarget = new PicassoImageCardViewTarget(mCardView);
+            mDefaultCardImage = mContext
+                    .getResources()
+                    .getDrawable(R.drawable.filmi);
         }
 
         public Tv getTv(){
@@ -36,6 +76,15 @@ public class TvChannelPresenter extends Presenter{
 
         public ImageCardView getmCardView(){
             return mCardView;
+        }
+        protected void updateCardViewImage(String url) {
+
+            Picasso.get()
+                    .load(url)
+                    .resize(CARD_WIDTH * 2, CARD_HEIGHT * 2)
+                    .centerCrop()
+                    .error(mDefaultCardImage)
+                    .into(mImageCardViewTarget);
         }
     }
 
@@ -62,7 +111,9 @@ public class TvChannelPresenter extends Presenter{
         ((ViewHolder) viewHolder).mCardView.setTitleText(tv.getTitle());
         ((ViewHolder) viewHolder).mCardView.setContentText(tv.getDescription());
         ((ViewHolder) viewHolder).mCardView.setMainImageDimensions(CARD_WIDTH,CARD_HEIGHT);
-        ((ViewHolder) viewHolder).mCardView.setMainImage(mContext.getDrawable(tv.getImageResource(mContext)));
+        ((ViewHolder) viewHolder).updateCardViewImage(tv.getImageUrl());
+
+
 
     }
 
@@ -70,6 +121,10 @@ public class TvChannelPresenter extends Presenter{
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
 
     }
+
+
+
+
 
 
 
