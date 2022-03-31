@@ -5,8 +5,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.leanback.app.BackgroundManager;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -61,7 +63,7 @@ public class MainFragment extends BrowseSupportFragment implements IMainFragment
 
     private void setupUIElements() {
         //setBadgeDrawable(getActivity().getResources().getDrawable(R.drawable.videos_by_google_banner));
-        setTitle("Kenyan TV Channels"); // Badge, when set, takes precedent
+        setTitle("TV/Radio Ent"); // Badge, when set, takes precedent
         // over title
         setHeadersState(HEADERS_DISABLED);
         setHeadersTransitionOnBackEnabled(false);
@@ -122,58 +124,65 @@ public class MainFragment extends BrowseSupportFragment implements IMainFragment
     }
 
     @Override
-    public void notifyOnRadioDataAvailable(List<Radio> radio) {
-        for(Radio r : radio) radioRowAdapter.add(r);
-
-    }
+    public void notifyOnRadioDataAvailable(List<Radio> radio) { for(Radio r : radio) radioRowAdapter.add(r); }
 
     private class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
 
-            Tv tv = (Tv)item;
-
-            // get video Id from url
-            String videoId = getVideoIdFromUrl(tv.getUrl());
-            String videoTag  = getVideoTagFromUrl(tv.getUrl());
-
-            String videoCheck = "";
+            if (item instanceof Tv) {
+                Tv tv = (Tv)item;
+                String videoId = getVideoIdFromUrl(tv.getUrl());
+                String videoTag  = getVideoTagFromUrl(tv.getUrl());
+                String videoCheck = "";
 
 
-            if(videoCheck != videoId){
-                YoutubeFragment fragment = new YoutubeFragment();
-                FragmentManager manager = getParentFragmentManager();
 
-                Bundle bundle = new Bundle();
-                String myMessage = videoId;
-                bundle.putString("message", myMessage );
-                fragment.setArguments(bundle);
-                manager.beginTransaction()
-                        .replace(R.id.main_browse_fragment, fragment)
-                        .addToBackStack(null)
-                        .commit();
+
+                if(videoCheck != videoId){
+                    YoutubeFragment fragment = new YoutubeFragment();
+                    FragmentManager manager = getParentFragmentManager();
+
+                    Bundle bundle = new Bundle();
+                    String myMessage = videoId;
+                    bundle.putString("message", myMessage );
+                    fragment.setArguments(bundle);
+                    manager.beginTransaction()
+                            .setReorderingAllowed(true)
+                            .replace(R.id.main_browse_fragment, fragment)
+                            .addToBackStack(null)
+                            .commit();
+
+
+                }else if(videoCheck != videoTag){
+                    Fragment mFragment= new DailymotionFragment(getContext());
+                    FragmentManager mManager = getParentFragmentManager();
+                    Bundle bundle = new Bundle();
+                    String myMessage2 = videoTag;
+                    bundle.putString("message",myMessage2);
+                    mFragment.setArguments(bundle);
+                    mManager.beginTransaction()
+                            .setReorderingAllowed(true)
+                            .replace(R.id.main_browse_fragment, mFragment)
+                            .addToBackStack(null)
+                            .commit();
+
+
+                }else{
+                    Log.e("Tag","tumefikia ingine " );
+                }
 
             }else {
-                Fragment mFragment= new DailymotionFragment();
+                Radio radio = (Radio) item;
 
-                Bundle bundle = new Bundle();
-                String myMessage2 = videoTag;
-                bundle.putString("message",myMessage2);
-                mFragment.setArguments(bundle);
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.main_browse_fragment, mFragment, null)
-                        .addToBackStack(null)
-                        .commit();
+                String radioTag  = radio.getUrl();
 
-
-
-
+                Log.e("Tag","radio line part "  +radioTag );
             }
 
 
-
-
         }
+
         //for youtube
         protected String getVideoIdFromUrl(String url){
             if (url.contains("http")){

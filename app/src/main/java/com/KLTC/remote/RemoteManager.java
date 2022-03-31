@@ -41,6 +41,7 @@ public class RemoteManager {
                 LocalData s = dataSnapshot.getValue(LocalData.class);
                 Log.i("TAG","trying " + s);
                 mFragment.notifyOnTvDataAvailable(s.getTv());
+                mFragment.notifyOnRadioDataAvailable(s.getRadio());
             }
             @Override
             public void onCancelled(FirebaseError firebaseError) {

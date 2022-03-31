@@ -43,12 +43,14 @@ public class YoutubeFragment extends Fragment {
 
                 if(!b){
                     player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+                   // player.cueVideo(videoID);
                     player.loadVideo(videoID);
                     player.play();
 
                 }
 
             }
+
 
             @Override
             public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult error) {
@@ -60,7 +62,10 @@ public class YoutubeFragment extends Fragment {
             }
         });
 
+
         return rootView;
 
     }
+
+
 }

@@ -1,15 +1,18 @@
 package com.KLTC.model;
-
-import android.content.Context;
-
 import com.google.gson.annotations.SerializedName;
 
+
+
 public class Radio {
+
     @SerializedName("id") private int id;
     @SerializedName("title") private String title;
     @SerializedName("description") private String description;
-    @SerializedName("localImageResource") private String thumbnail;
+    @SerializedName("localImageResource") private String localImageResource;
     @SerializedName("url") private String url;
+    @SerializedName("imageUrl") private String imageUrl;
+
+    public Radio(){}
 
     public int getId(){
         return id;
@@ -34,18 +37,10 @@ public class Radio {
     public void setDescription(String description){
         this.description=description;
     }
-    public String getThumbnail(){
-        return thumbnail;
-    }
 
-    public void setThumbnail(String thumbnail){
-        this.thumbnail=thumbnail;
-    }
+    public  String getImageUrl(){return imageUrl;}
 
-    public int getImageResource(Context context){
-        return context.getResources()
-                .getIdentifier(thumbnail, "drawable",context.getPackageName());
-    }
+    public void setImageUrl(String imageUrl){this.imageUrl=imageUrl;}
 
     public String getUrl(){
         return url;
@@ -55,3 +50,4 @@ public class Radio {
         this.url=url;
     }
 }
+
