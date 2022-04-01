@@ -134,6 +134,7 @@ public class MainFragment extends BrowseSupportFragment implements IMainFragment
                 Tv tv = (Tv)item;
                 String videoId = getVideoIdFromUrl(tv.getUrl());
                 String videoTag  = getVideoTagFromUrl(tv.getUrl());
+                String videoUrl  = tv.getUrl();
                 String videoCheck = "";
 
 
@@ -168,6 +169,18 @@ public class MainFragment extends BrowseSupportFragment implements IMainFragment
                             .commit();
 
 
+                }else if(videoCheck != videoUrl) {
+                    Fragment mFragments = new TwitchFragment();
+                    FragmentManager mManager = getParentFragmentManager();
+                    Bundle bundle = new Bundle();
+                    String myMessage3 = videoUrl;
+                    bundle.putString("message", myMessage3);
+                    mFragments.setArguments(bundle);
+                    mManager.beginTransaction()
+                            .setReorderingAllowed(true)
+                            .replace(R.id.main_browse_fragment, mFragments)
+                            .addToBackStack(null)
+                            .commit();
                 }else{
                     Log.e("Tag","tumefikia ingine " );
                 }
@@ -177,7 +190,17 @@ public class MainFragment extends BrowseSupportFragment implements IMainFragment
 
                 String radioTag  = radio.getUrl();
 
-                Log.e("Tag","radio line part "  +radioTag );
+                Fragment radioFrag = new RadioFragment();
+                FragmentManager mManager = getParentFragmentManager();
+                Bundle bundle = new Bundle();
+                String radioMsg = radioTag;
+                bundle.putString("message", radioMsg);
+                radioFrag.setArguments(bundle);
+                mManager.beginTransaction()
+                        .setReorderingAllowed(true)
+                        .replace(R.id.main_browse_fragment, radioFrag)
+                        .addToBackStack(null)
+                        .commit();
             }
 
 

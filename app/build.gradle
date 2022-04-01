@@ -13,8 +13,8 @@ android {
         applicationId "com.KLTC"
         minSdk 23
         targetSdk 32
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -72,6 +72,7 @@ dependencies {
     implementation 'com.dailymotion.dailymotion-sdk-android:sdk:0.2.11'
 
     implementation 'com.google.android.exoplayer:exoplayer:2.17.0'
+    implementation 'com.google.android.gms:play-services-safetynet:18.0.1'
 
     //for ads
 
